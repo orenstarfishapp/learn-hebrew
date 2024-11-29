@@ -9,16 +9,6 @@ export interface Story {
   estimatedTime?: number;
   points?: number;
   bonusChallenge?: boolean;
-  category?: string;
-}
-
-export interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  progress: number;
-  total: number;
 }
 
 export type Answer = {

@@ -1,3 +1,4 @@
+import { Book, Clock } from "lucide-react";
 import { motion } from 'framer-motion';
 import { Award, Star, Trophy, Target } from 'lucide-react';
 
