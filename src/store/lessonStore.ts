@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Story as ReadingStory } from '@/types/reading';
-import { Story as LessonStory } from '@/types/lesson';
+import { Story as LessonStory, HebrewLetter } from '@/types/lesson';
 import { stories } from '@/data/reading-content';
+import { hebrewAlphabet } from '@/data/alphabet';
 
 interface LessonState {
   currentLetterIndex: number;
@@ -19,8 +20,8 @@ interface LessonState {
   setCurrentLetter: (index: number) => void;
   markLetterComplete: (letter: string) => void;
   markStoryComplete: (storyId: string, score: number) => void;
-  getCurrentLetter: () => LessonStory | null;
-  getNextLetter: () => LessonStory | null;
+  getCurrentLetter: () => HebrewLetter | null;
+  getNextLetter: () => HebrewLetter | null;
   getStoryById: (id: string) => LessonStory | null;
   getAvailableStories: () => LessonStory[];
 }
@@ -66,8 +67,12 @@ export const useLessonStore = create<LessonState>()(
         if (story) {
           return {
             ...story,
-            translation: story.translation || "",
-            vocabulary: story.vocabulary || [],
+            content: story.hebrew,
+            vocabulary: story.vocabulary.map(word => ({
+              word: word,
+              translation: word,
+              transliteration: word
+            })),
             difficulty: story.difficulty || "beginner"
           } as LessonStory;
         }
@@ -77,8 +82,12 @@ export const useLessonStore = create<LessonState>()(
       getAvailableStories: () => {
         return stories.map((story: ReadingStory) => ({
           ...story,
-          translation: story.translation || "",
-          vocabulary: story.vocabulary || [],
+          content: story.hebrew,
+          vocabulary: story.vocabulary.map(word => ({
+            word: word,
+            translation: word,
+            transliteration: word
+          })),
           difficulty: story.difficulty || "beginner"
         })) as LessonStory[];
       }

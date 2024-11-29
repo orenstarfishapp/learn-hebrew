@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { LeaderboardEntry, WeeklyChallenge, Achievement } from '@/types/leaderboard';
 import { achievements } from '@/data/achievements';
+import { mockLeaderboard, mockWeeklyChallenges } from '@/data/mocks';
 
 interface GameState {
   score: number;

@@ -30,7 +30,7 @@ export interface Achievement {
   id: string;
   title: string;
   description: string;
+  category: string;
   icon: string;
-  unlockedAt?: Date;
   xpReward: number;
 }

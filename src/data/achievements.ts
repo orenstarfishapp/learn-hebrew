@@ -1,20 +1,20 @@
-export interface Achievement {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  icon: string;
-  xpReward: number;
-}
+import { Achievement } from '@/types/leaderboard';
 
 export const achievements: Achievement[] = [
   {
-    id: "1",
-    title: "First Steps",
-    description: "Complete your first lesson",
-    category: "lessons",
-    icon: "star",
-    xpReward: 100
+    id: "first-story",
+    title: "First Story",
+    description: "Complete your first story",
+    category: "milestone",
+    xpReward: 100,
+    icon: "star"
   },
-  // Add more achievements as needed
+  {
+    id: "perfect-score",
+    title: "Perfect Score",
+    description: "Get 100% on a story",
+    category: "score",
+    xpReward: 200,
+    icon: "trophy"
+  }
 ]; 

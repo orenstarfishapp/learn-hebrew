@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star, Award, BookOpen } from 'lucide-react';
+import { Award, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const stories = [

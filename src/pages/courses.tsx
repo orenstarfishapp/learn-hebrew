@@ -1,5 +1,5 @@
-import { Book, Clock, Globe, Star, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Clock, Globe, Star, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const courses = [

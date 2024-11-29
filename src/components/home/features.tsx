@@ -1,4 +1,4 @@
-import { BookOpen, Globe, Users, Target, Star } from 'lucide-react';
+import { BookOpen, Globe, Users, Target, Star, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [

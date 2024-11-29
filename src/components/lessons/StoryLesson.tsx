@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLessonStore } from '@/store/lessonStore';
 import { Button } from '../ui/button';
-import { Story, Question } from '@/types/lesson';
 
 interface StoryLessonProps {
   storyId: string;
