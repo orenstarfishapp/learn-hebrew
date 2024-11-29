@@ -15,7 +15,7 @@ export function WeeklyChallenges() {
       setChallenges(data);
     };
     fetchChallenges();
-  }, []);
+  }, [getWeeklyChallenges]);
 
   const getTimeRemaining = (endDate: Date) => {
     const now = new Date();

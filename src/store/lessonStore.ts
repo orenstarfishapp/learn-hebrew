@@ -66,12 +66,21 @@ export const useLessonStore = create<LessonState>()(
         const story = stories.find((s: ReadingStory) => s.id === id) || null;
         if (story) {
           return {
-            ...story,
+            id: story.id,
+            title: story.title,
             content: story.hebrew,
+            translation: story.english,
             vocabulary: story.vocabulary.map(word => ({
-              word: word,
+              word,
               translation: word,
               transliteration: word
+            })),
+            questions: story.questions.map(q => ({
+              id: q.id,
+              type: 'multiple-choice',
+              question: q.english,
+              correctAnswer: q.correctAnswer,
+              options: q.options.map(o => o.english)
             })),
             difficulty: story.difficulty || "beginner"
           } as LessonStory;
@@ -81,12 +90,21 @@ export const useLessonStore = create<LessonState>()(
 
       getAvailableStories: () => {
         return stories.map((story: ReadingStory) => ({
-          ...story,
+          id: story.id,
+          title: story.title,
           content: story.hebrew,
+          translation: story.english,
           vocabulary: story.vocabulary.map(word => ({
-            word: word,
+            word,
             translation: word,
             transliteration: word
+          })),
+          questions: story.questions.map(q => ({
+            id: q.id,
+            type: 'multiple-choice',
+            question: q.english,
+            correctAnswer: q.correctAnswer,
+            options: q.options.map(o => o.english)
           })),
           difficulty: story.difficulty || "beginner"
         })) as LessonStory[];

@@ -1,23 +1,36 @@
-```typescript
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
-import { ArrowLeft, Gamepad2, Trophy, Star } from 'lucide-react';
+import { ArrowLeft, Gamepad2, Trophy } from 'lucide-react';
 import { useState } from 'react';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
 
-// ... rest of the imports
+interface Props {
+  onBack: () => void;
+}
 
 export function GameCenter({ onBack }: Props) {
   const { width, height } = useWindowSize();
-  // ... other state declarations
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const handleCelebrate = () => {
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 3000);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <motion.div className="min-h-screen bg-gray-50 pt-20">
       {showConfetti && <Confetti width={width} height={height} />}
       
-      {/* Rest of the component remains the same */}
-    </div>
+      <Button onClick={onBack} className="mb-4">
+        <ArrowLeft className="mr-2" />
+        Back
+      </Button>
+
+      <div className="grid gap-4">
+        <Trophy className="h-8 w-8 text-yellow-500" onClick={handleCelebrate} />
+        <Gamepad2 className="h-8 w-8 text-blue-500" />
+      </div>
+    </motion.div>
   );
 }
-```
