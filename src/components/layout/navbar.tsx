@@ -53,7 +53,7 @@ export function Navbar() {
               {navItems.map((item) => (
                 <Link key={item.name} to={item.path}>
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     className={`text-gray-600 hover:text-brand-600 hover:bg-brand-50 ${
                       location.pathname === item.path ? 'bg-brand-50 text-brand-600' : ''
                     }`}
@@ -90,7 +90,7 @@ export function Navbar() {
 
           <div className="md:hidden flex items-center">
             <Button
-              variant="ghost"
+              variant="outline"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -120,7 +120,7 @@ export function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     className={`w-full justify-start text-gray-600 hover:text-brand-600 hover:bg-brand-50 ${
                       location.pathname === item.path ? 'bg-brand-50 text-brand-600' : ''
                     }`}

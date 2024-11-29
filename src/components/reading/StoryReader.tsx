@@ -78,7 +78,7 @@ export function StoryReader({ story, onBack, onComplete }: StoryReaderProps) {
           className="bg-white rounded-xl shadow-lg p-8"
         >
           <div className="flex items-center mb-8">
-            <Button variant="ghost" onClick={onBack} className="mr-4">
+            <Button variant="outline" onClick={onBack} className="mr-4">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <h2 className="text-2xl font-bold">Reading Practice</h2>
