@@ -1,17 +1,40 @@
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
 import { BookOpen, Star, Trophy } from 'lucide-react';
-import { readingLevels } from '@/data/reading-content';
+import { Story } from '@/types/reading';
+
+interface Level {
+  id: string;
+  title: string;
+  description: string;
+  stories: Story[];
+  difficulty: string;
+}
 
 interface LevelSelectionProps {
   onSelectLevel: (levelId: string) => void;
   userLevel: number;
 }
 
+// Import reading levels data and ensure it matches the Story type
+import { readingContent } from '@/data/reading-content';
+const typedReadingContent: Story[] = readingContent;
+
+// Transform the reading levels data into our Level structure
+const readingLevels: Level[] = Array.from(
+  new Set(typedReadingContent.map((story: Story) => story.difficulty))
+).map((difficulty: string): Level => ({
+  id: difficulty,
+  title: difficulty.charAt(0).toUpperCase() + difficulty.slice(1),
+  description: `${difficulty} level stories`,
+  difficulty,
+  stories: typedReadingContent.filter((story: Story) => story.difficulty === difficulty)
+}));
+
 export function LevelSelection({ onSelectLevel, userLevel }: LevelSelectionProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {readingLevels.map((level, index) => (
+      {readingLevels.map((level: Level, index) => (
         <motion.div
           key={level.id}
           initial={{ opacity: 0, y: 20 }}

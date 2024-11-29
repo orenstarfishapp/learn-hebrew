@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { HebrewLetter, Story } from '../types/lesson';
-import { hebrewAlphabet } from '../data/alphabet';
-import { stories } from '../data/stories';
+import { Story as ReadingStory } from '@/types/reading';
+import { Story as LessonStory } from '@/types/lesson';
+import { stories } from '@/data/reading-content';
 
 interface LessonState {
   currentLetterIndex: number;
@@ -19,10 +19,10 @@ interface LessonState {
   setCurrentLetter: (index: number) => void;
   markLetterComplete: (letter: string) => void;
   markStoryComplete: (storyId: string, score: number) => void;
-  getCurrentLetter: () => HebrewLetter | null;
-  getNextLetter: () => HebrewLetter | null;
-  getStoryById: (id: string) => Story | null;
-  getAvailableStories: () => Story[];
+  getCurrentLetter: () => LessonStory | null;
+  getNextLetter: () => LessonStory | null;
+  getStoryById: (id: string) => LessonStory | null;
+  getAvailableStories: () => LessonStory[];
 }
 
 export const useLessonStore = create<LessonState>()(
@@ -61,14 +61,26 @@ export const useLessonStore = create<LessonState>()(
         return hebrewAlphabet[currentLetterIndex + 1] || null;
       },
 
-      getStoryById: (id) => stories.find(story => story.id === id) || null,
+      getStoryById: (id) => {
+        const story = stories.find((s: ReadingStory) => s.id === id) || null;
+        if (story) {
+          return {
+            ...story,
+            translation: story.translation || "",
+            vocabulary: story.vocabulary || [],
+            difficulty: story.difficulty || "beginner"
+          } as LessonStory;
+        }
+        return null;
+      },
 
       getAvailableStories: () => {
-        const { completedStories } = get();
-        return stories.filter(story => 
-          story.difficulty === 'beginner' || 
-          completedStories.length >= 3
-        );
+        return stories.map((story: ReadingStory) => ({
+          ...story,
+          translation: story.translation || "",
+          vocabulary: story.vocabulary || [],
+          difficulty: story.difficulty || "beginner"
+        })) as LessonStory[];
       }
     }),
     {

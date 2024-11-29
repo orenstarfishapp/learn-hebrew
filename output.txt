@@ -1,0 +1,49 @@
+
+> hebrew-learning-platform@0.0.0 build
+> tsc && vite build
+
+src/components/game/WeeklyChallenges.tsx(1,10): error TS2300: Duplicate identifier 'Button'.
+src/components/game/WeeklyChallenges.tsx(2,1): error TS6133: 'ButtonVariant' is declared but its value is never read.
+src/components/game/WeeklyChallenges.tsx(8,10): error TS2300: Duplicate identifier 'Button'.
+src/components/game/WeeklyChallenges.tsx(81,19): error TS2322: Type '"outline" | "default"' is not assignable to type '"primary" | "secondary" | "outline" | undefined'.
+  Type '"default"' is not assignable to type '"primary" | "secondary" | "outline" | undefined'.
+src/components/home/features.tsx(1,27): error TS6133: 'MessageCircle' is declared but its value is never read.
+src/components/home/features.tsx(1,42): error TS6133: 'Trophy' is declared but its value is never read.
+src/components/lessons/StoryLesson.tsx(5,1): error TS6192: All imports in import declaration are unused.
+src/components/practice/GameCenter.tsx(1,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+src/components/practice/ReadingPractice.tsx(3,46): error TS6133: 'Award' is declared but its value is never read.
+src/components/reading/AchievementCenter.tsx(44,32): error TS2339: Property 'category' does not exist on type 'Achievement'.
+src/components/reading/ReadingStats.tsx(2,52): error TS6133: 'TrendingUp' is declared but its value is never read.
+src/components/reading/StoryProgress.tsx(1,1): error TS2349: This expression is not callable.
+  Type 'String' has no call signatures.
+src/components/reading/StoryReader.tsx(3,21): error TS6133: 'Volume2' is declared but its value is never read.
+src/data/reading-content.ts(9,7): error TS2741: Property 'xpReward' is missing in type '{ id: string; hebrew: string; transliteration: string; english: string; questions: { id: string; hebrew: string; transliteration: string; english: string; options: ({ hebrew: string; transliteration: string; english: string; isCorrect: true; } | { ...; })[]; }[]; }' but required in type 'Story'.
+src/data/reading-content.ts(44,7): error TS2741: Property 'xpReward' is missing in type '{ id: string; hebrew: string; transliteration: string; english: string; questions: { id: string; hebrew: string; transliteration: string; english: string; options: ({ hebrew: string; transliteration: string; english: string; isCorrect: true; } | { ...; })[]; }[]; }' but required in type 'Story'.
+src/data/reading-content.ts(79,7): error TS2741: Property 'xpReward' is missing in type '{ id: string; hebrew: string; transliteration: string; english: string; questions: { id: string; hebrew: string; transliteration: string; english: string; options: ({ hebrew: string; transliteration: string; english: string; isCorrect: true; } | { ...; })[]; }[]; }' but required in type 'Story'.
+src/data/stories.ts(7,5): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/stories.ts(12,5): error TS2322: Type 'string' is not assignable to type 'number'.
+src/data/stories.ts(27,19): error TS2322: Type 'string' is not assignable to type 'Answer'.
+src/data/stories.ts(27,32): error TS2322: Type 'string' is not assignable to type 'Answer'.
+src/data/stories.ts(27,44): error TS2322: Type 'string' is not assignable to type 'Answer'.
+src/data/stories.ts(27,53): error TS2322: Type 'string' is not assignable to type 'Answer'.
+src/data/stories.ts(33,5): error TS2322: Type '{ type: string; description: string; requirement: string; reward: number; }' is not assignable to type 'boolean | undefined'.
+src/pages/courses.tsx(1,10): error TS6133: 'Book' is declared but its value is never read.
+src/pages/language-exchange.tsx(3,10): error TS6133: 'Globe' is declared but its value is never read.
+src/pages/language-exchange.tsx(3,17): error TS6133: 'MessageCircle' is declared but its value is never read.
+src/pages/reading/index.tsx(24,10): error TS6133: 'selectedStory' is declared but its value is never read.
+src/pages/reading/index.tsx(102,76): error TS2345: Argument of type 'Story' is not assignable to parameter of type 'SetStateAction<null>'.
+  Type 'Story' provides no match for the signature '(prevState: null): null'.
+src/pages/success-stories.tsx(2,10): error TS6133: 'Star' is declared but its value is never read.
+src/store/gameStore.ts(64,29): error TS2552: Cannot find name 'achievements'. Did you mean 'achievement'?
+src/store/gameStore.ts(64,47): error TS7006: Parameter 'a' implicitly has an 'any' type.
+src/store/gameStore.ts(75,16): error TS2304: Cannot find name 'mockLeaderboard'.
+src/store/gameStore.ts(80,16): error TS2304: Cannot find name 'mockWeeklyChallenges'.
+src/store/lessonStore.ts(64,29): error TS2322: Type 'import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/reading").Story | null' is not assignable to type 'import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/lesson").Story | null'.
+  Type 'Story' is missing the following properties from type 'Story': translation, vocabulary, difficulty
+src/store/lessonStore.ts(66,7): error TS2322: Type '() => import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/reading").Story[]' is not assignable to type '() => import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/lesson").Story[]'.
+  Type 'import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/reading").Story[]' is not assignable to type 'import("/home/owen/\u05E9\u05D5\u05DC\u05D7\u05DF \u05D4\u05E2\u05D1\u05D5\u05D3\u05D4/proudction project/src/types/lesson").Story[]'.
+    Type 'Story' is missing the following properties from type 'Story': translation, vocabulary, difficulty
+src/store/lessonStore.ts(69,17): error TS2339: Property 'difficulty' does not exist on type 'Story'.
+src/store/readingStore.ts(96,52): error TS2339: Property 'title' does not exist on type '{ id: string; name: string; description: string; xpReward: number; icon: string; }'.
+src/store/readingStore.ts(109,56): error TS2339: Property 'title' does not exist on type '{ id: string; name: string; description: string; xpReward: number; icon: string; }'.

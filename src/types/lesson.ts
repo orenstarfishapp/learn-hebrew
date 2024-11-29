@@ -8,15 +8,21 @@ export interface Question {
 }
 
 export interface HebrewLetter {
+  id?: string;
   letter: string;
   name: string;
   pronunciation: string;
-  soundUrl?: string;
-  examples: {
+  examples: Array<{
     word: string;
     translation: string;
     transliteration: string;
-  }[];
+  }>;
+}
+
+export interface VocabularyItem {
+  word: string;
+  translation: string;
+  transliteration: string;
 }
 
 export interface Story {
@@ -24,11 +30,7 @@ export interface Story {
   title: string;
   content: string;
   translation: string;
-  vocabulary: {
-    word: string;
-    translation: string;
-    transliteration: string;
-  }[];
+  vocabulary: VocabularyItem[];
   questions: Question[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: string;
 }

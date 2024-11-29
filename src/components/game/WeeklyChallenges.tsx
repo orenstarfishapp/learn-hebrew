@@ -1,9 +1,9 @@
+import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion';
 import { Target, Clock, Award } from 'lucide-react';
 import { useGameStore } from '@/store/gameStore';
 import { useState, useEffect } from 'react';
 import { WeeklyChallenge } from '@/types/leaderboard';
-import { Button } from '../ui/button';
 
 export function WeeklyChallenges() {
   const [challenges, setChallenges] = useState<WeeklyChallenge[]>([]);

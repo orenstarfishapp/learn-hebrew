@@ -11,6 +11,7 @@ interface Achievement {
   unlocked: boolean;
   unlockedAt?: Date;
   xpReward: number;
+  category: string;
 }
 
 interface AchievementCenterProps {

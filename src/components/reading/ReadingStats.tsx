@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Trophy, Star, Book, Clock, Target, Award, TrendingUp } from 'lucide-react';
+import { Trophy, Star, Book, Clock, Target, Award } from 'lucide-react';
 import { Progress } from '../ui/progress';
 
 interface ReadingStatsProps {

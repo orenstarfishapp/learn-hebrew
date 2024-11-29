@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
-import { ArrowLeft, Volume2, BookOpen, HelpCircle } from 'lucide-react';
+import { ArrowLeft, BookOpen, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';

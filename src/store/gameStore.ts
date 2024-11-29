@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { LeaderboardEntry, WeeklyChallenge, Achievement } from '@/types/leaderboard';
+import { achievements } from '@/data/achievements';
 
 interface GameState {
   score: number;
@@ -61,7 +62,7 @@ export const useGameStore = create<GameState>()(
       },
 
       unlockAchievement: (achievementId) => {
-        const achievement = achievements.find(a => a.id === achievementId);
+        const achievement = achievements.find((a: Achievement) => a.id === achievementId);
         if (achievement && !get().achievements.find(a => a.id === achievementId)) {
           set((state) => ({
             achievements: [...state.achievements, { ...achievement, unlockedAt: new Date() }],

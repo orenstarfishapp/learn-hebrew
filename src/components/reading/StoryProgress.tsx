@@ -1,4 +1,3 @@
-```typescript
 import { motion } from 'framer-motion';
 import { Trophy, Star, Clock, Award } from 'lucide-react';
 
@@ -83,4 +82,3 @@ export function StoryProgress({
     </motion.div>
   );
 }
-```

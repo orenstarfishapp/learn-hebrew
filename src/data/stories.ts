@@ -2,40 +2,52 @@ import { Story } from '@/types/reading';
 
 export const stories: Story[] = [
   {
-    id: 'beginner-1',
-    title: 'First Day in Israel',
-    level: 'Beginner',
-    category: 'Daily Life',
-    hebrew: 'שלום! קוראים לי דן. היום הגעתי לישראל. אני גר בתל אביב. העיר יפה מאוד.',
-    translation: 'Hello! My name is Dan. Today I arrived in Israel. I live in Tel Aviv. The city is very beautiful.',
-    audioUrl: '/audio/stories/first-day.mp3',
-    estimatedTime: '5 mins',
-    points: 100,
-    xpReward: 50,
-    vocabulary: [
-      { word: 'שלום', translation: 'Hello', transliteration: 'Shalom' },
-      { word: 'קוראים לי', translation: 'My name is', transliteration: 'Korim li' },
-      { word: 'היום', translation: 'Today', transliteration: 'Hayom' },
-      { word: 'הגעתי', translation: 'I arrived', transliteration: 'Higati' },
-      { word: 'גר', translation: 'Live', transliteration: 'Gar' }
-    ],
+    id: "story-1",
+    title: "Cities of Israel",
+    hebrew: "ערי ישראל",
+    transliteration: "Arei Israel",
+    english: "Cities of Israel",
+    xpReward: 100,
+    translation: "Cities of Israel",
+    vocabulary: [],
+    difficulty: "beginner",
     questions: [
       {
-        id: 'q1',
-        type: 'multiple-choice',
-        question: 'Where does Dan live?',
-        options: ['Jerusalem', 'Tel Aviv', 'Haifa', 'Eilat'],
-        correctAnswer: 'Tel Aviv',
-        explanation: 'The text states "אני גר בתל אביב" (I live in Tel Aviv)',
-        points: 20
+        id: "q1",
+        hebrew: "מה היא בירת ישראל?",
+        transliteration: "Ma hi birat Israel?",
+        english: "What is the capital of Israel?",
+        text: "What is the capital of Israel?",
+        correctAnswer: "Jerusalem",
+        options: [
+          {
+            hebrew: "ירושלים",
+            transliteration: "Yerushalayim",
+            english: "Jerusalem",
+            isCorrect: true
+          },
+          {
+            hebrew: "תל אביב",
+            transliteration: "Tel Aviv",
+            english: "Tel Aviv",
+            isCorrect: false
+          },
+          {
+            hebrew: "חיפה",
+            transliteration: "Haifa",
+            english: "Haifa",
+            isCorrect: false
+          },
+          {
+            hebrew: "אילת",
+            transliteration: "Eilat",
+            english: "Eilat",
+            isCorrect: false
+          }
+        ]
       }
     ],
-    bonusChallenge: {
-      type: 'no-translation',
-      description: 'Complete the reading and questions without using the translation',
-      requirement: 'Score 100% without viewing translation',
-      reward: 50
-    }
+    bonusChallenge: false
   }
 ];
 

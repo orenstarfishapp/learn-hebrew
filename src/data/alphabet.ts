@@ -2,6 +2,7 @@ import { HebrewLetter } from '../types/lesson';
 
 export const hebrewAlphabet: HebrewLetter[] = [
   {
+    id: 'alef',
     letter: 'א',
     name: 'Alef',
     pronunciation: 'Silent',
@@ -19,6 +20,7 @@ export const hebrewAlphabet: HebrewLetter[] = [
     ]
   },
   {
+    id: 'bet',
     letter: 'ב',
     name: 'Bet',
     pronunciation: 'b/v',

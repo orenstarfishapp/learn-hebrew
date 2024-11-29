@@ -1,7 +1,6 @@
-```typescript
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Story, ReadingProgress, UserReadingStats } from '@/types/reading';
+import { Story, ReadingProgress, UserReadingStats, Achievement, Answer } from '@/types/reading';
 import { stories, readingLevels, readingAchievements } from '@/data/stories';
 
 interface ReadingState {
@@ -22,9 +21,14 @@ interface ReadingState {
   getAvailableStories: () => Story[];
 }
 
-export const useReadingStore = create<ReadingState>()(
+type ReadingStoreWithPersist = ReadingState & {
+  _hasHydrated: boolean;
+};
+
+export const useReadingStore = create<ReadingStoreWithPersist>()(
   persist(
     (set, get) => ({
+      _hasHydrated: false,
       progress: [],
       stats: {
         totalStoriesRead: 0,
@@ -57,8 +61,70 @@ export const useReadingStore = create<ReadingState>()(
         const question = currentStory.questions.find(q => q.id === questionId);
         if (!question) return;
 
-        const isCorrect = answer === question.correctAnswer;
-        // Update progress and stats as needed
+        const selectedAnswer = question.options.find(
+          (opt: Answer) => opt.english === answer
+        );
+        
+        if (selectedAnswer?.isCorrect) {
+          set(() => ({
+            // Update state for correct answer
+            stats: {
+              ...get().stats,
+              // Add your correct answer logic here
+            }
+          }));
+        } else {
+          set(() => ({
+            // Update state for incorrect answer
+            stats: {
+              ...get().stats,
+              // Add your incorrect answer logic here
+            }
+          }));
+        }
+      },
+
+      checkAchievements: () => {
+        const { stats, progress } = get();
+        const newAchievements: Achievement[] = [];
+
+        if (progress.length === 1) {
+          const firstStory = readingAchievements.find(a => a.id === 'first-story');
+          if (firstStory) {
+            newAchievements.push({
+              id: firstStory.id,
+              title: firstStory.name || '',
+              description: firstStory.description,
+              xpReward: firstStory.xpReward,
+              dateEarned: new Date(),
+              category: 'milestone'
+            });
+          }
+        }
+
+        if (progress.some(p => p.score === 100)) {
+          const perfectScore = readingAchievements.find(a => a.id === 'perfect-score');
+          if (perfectScore) {
+            newAchievements.push({
+              id: perfectScore.id,
+              title: perfectScore.name || '',
+              description: perfectScore.description,
+              xpReward: perfectScore.xpReward,
+              dateEarned: new Date(),
+              category: 'score'
+            });
+          }
+        }
+
+        if (newAchievements.length > 0) {
+          set({
+            stats: {
+              ...stats,
+              achievements: [...stats.achievements, ...newAchievements],
+              totalXPEarned: stats.totalXPEarned + newAchievements.reduce((sum, a) => sum + a.xpReward, 0)
+            }
+          });
+        }
       },
 
       completeStory: (storyId, data) => {
@@ -101,42 +167,12 @@ export const useReadingStore = create<ReadingState>()(
         // Check for new achievements
         get().checkAchievements();
       },
-
-      checkAchievements: () => {
-        const { stats, progress } = get();
-        const newAchievements = [];
-
-        // Check each achievement condition
-        if (progress.length === 1) {
-          newAchievements.push(readingAchievements.find(a => a.id === 'first-story'));
-        }
-
-        if (progress.some(p => p.score === 100)) {
-          newAchievements.push(readingAchievements.find(a => a.id === 'perfect-score'));
-        }
-
-        // Add new achievements and XP
-        if (newAchievements.length > 0) {
-          set({
-            stats: {
-              ...stats,
-              achievements: [...stats.achievements, ...newAchievements.map(a => ({
-                ...a!,
-                dateEarned: new Date()
-              }))],
-              totalXPEarned: stats.totalXPEarned + newAchievements.reduce((sum, a) => sum + (a?.xpReward || 0), 0)
-            }
-          });
-        }
-      },
-
       getUserLevel: () => {
         const { stats } = get();
         return readingLevels.findIndex(level => 
           stats.totalXPEarned < level.xpRequired
         );
       },
-
       getAvailableStories: () => {
         const { progress, stats } = get();
         const userLevel = get().getUserLevel();
@@ -165,8 +201,12 @@ export const useReadingStore = create<ReadingState>()(
       }
     }),
     {
-      name: 'reading-storage'
+      name: 'reading-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state._hasHydrated = true;
+        }
+      },
     }
   )
 );
-```
