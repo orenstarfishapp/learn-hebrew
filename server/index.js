@@ -13,6 +13,16 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Force HTTPS in production
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(`https://${req.hostname}${req.url}`);
+    }
+    next();
+  });
+}
+
 // Serve static files from the dist directory
 app.use(express.static('dist'));
 
