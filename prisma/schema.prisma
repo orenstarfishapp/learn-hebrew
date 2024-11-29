@@ -50,7 +50,7 @@ model StoryProgress {
   attemptsCount    Int      @default(0)
   lastAttemptDate  DateTime @default(now())
   bonusCompleted   Boolean  @default(false)
-  mistakesMade     String[] // store question IDs
+  mistakesMade     String   // store as JSON string // store question IDs
   readWithoutTranslation Boolean @default(false)
   user             User     @relation(fields: [userId], references: [id])
   story            Story    @relation(fields: [storyId], references: [id])
@@ -73,7 +73,7 @@ model Question {
   id              String   @id @default(uuid())
   storyId         String
   question        String
-  options         String[] // JSON array of options
+  options         String   // store as JSON string // JSON array of options
   correctAnswer   String
   explanation     String?
   points          Int      @default(10)
@@ -109,7 +109,7 @@ model PracticeResult {
   type        String   // "speaking", "writing", "reading", "conversation"
   score       Int
   timeSpent   Int      // in seconds
-  mistakes    String[] // store specific mistakes made
+  mistakes    String   // store as JSON string // store specific mistakes made
   feedback    String?
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
