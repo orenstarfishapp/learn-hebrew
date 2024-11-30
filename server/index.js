@@ -10,12 +10,18 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+// CORS configuration
+app.use(cors({
+  origin: ['https://easilystudyhebrew.com', 'https://www.easilystudyhebrew.com', 'http://localhost:5000'],
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Force HTTPS in production
+// Force HTTPS and www in production
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
+    // Check for HTTPS
     if (req.headers['x-forwarded-proto'] !== 'https') {
       return res.redirect(`https://${req.hostname}${req.url}`);
     }
@@ -39,4 +45,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`Environment: ${process.env.NODE_ENV}`);
 });
