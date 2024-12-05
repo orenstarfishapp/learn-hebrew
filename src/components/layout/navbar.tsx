@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Menu, X, LogOut, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuthStore } from '@/store/authStore';
 
 interface NavbarProps {
   onLogout?: () => void;
@@ -11,6 +12,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onLogout, onSettings }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useAuthStore();
 
   const menuItems = [
     { label: 'Home', path: '/' },
@@ -41,15 +43,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogout, onSettings }) => {
             ))}
             
             <div className="ml-4 flex items-center space-x-2">
-              {onSettings && (
-                <Button variant="outline" onClick={onSettings}>
-                  <Settings className="h-4 w-4" />
-                </Button>
-              )}
-              {onLogout && (
-                <Button variant="outline" onClick={onLogout}>
-                  <LogOut className="h-4 w-4" />
-                </Button>
+              {isAuthenticated ? (
+                <>
+                  {onSettings && (
+                    <Button variant="outline" onClick={onSettings}>
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                  )}
+                  {onLogout && (
+                    <Button variant="outline" onClick={onLogout}>
+                      <LogOut className="h-4 w-4" />
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Link to="/auth/login">
+                    <Button variant="outline">Sign In</Button>
+                  </Link>
+                  <Link to="/auth/signup">
+                    <Button variant="primary">Sign Up</Button>
+                  </Link>
+                </>
               )}
             </div>
           </div>
@@ -86,35 +101,52 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogout, onSettings }) => {
                   </Button>
                 </Link>
               ))}
-            </div>
-            <div className="px-2 pt-2 pb-3 border-t">
-              {onSettings && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    onSettings();
-                    setIsOpen(false);
-                  }}
-                  className="w-full text-left justify-start mb-2"
-                >
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              )}
-              {onLogout && (
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    onLogout();
-                    setIsOpen(false);
-                  }}
-                  className="w-full text-left justify-start"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </Button>
+              
+              {!isAuthenticated && (
+                <>
+                  <Link to="/auth/login" className="block" onClick={() => setIsOpen(false)}>
+                    <Button variant="outline" className="w-full text-left justify-start">
+                      Sign In
+                    </Button>
+                  </Link>
+                  <Link to="/auth/signup" className="block" onClick={() => setIsOpen(false)}>
+                    <Button variant="primary" className="w-full text-left justify-start">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </>
               )}
             </div>
+            {isAuthenticated && (
+              <div className="px-2 pt-2 pb-3 border-t">
+                {onSettings && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      onSettings();
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-left justify-start mb-2"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </Button>
+                )}
+                {onLogout && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      onLogout();
+                      setIsOpen(false);
+                    }}
+                    className="w-full text-left justify-start"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                )}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
