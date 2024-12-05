@@ -1,11 +1,26 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { MessageCircle, Mic, PenTool, Book } from 'lucide-react';
+import { 
+  MessageCircle, 
+  Mic, 
+  PenTool, 
+  Book, 
+  PlaySquare, 
+  GraduationCap, 
+  Headphones, 
+  GamepadIcon, 
+  LineChart 
+} from 'lucide-react';
 import { useState } from 'react';
 import { SpeakingPractice } from '@/components/practice/SpeakingPractice';
 import { WritingPractice } from '@/components/practice/WritingPractice';
 import { ReadingPractice } from '@/components/practice/ReadingPractice';
 import { ConversationPractice } from '@/components/practice/ConversationPractice';
+import { VocabularyPractice } from '@/components/practice/VocabularyPractice';
+import { GrammarPractice } from '@/components/practice/GrammarPractice';
+import { ListeningPractice } from '@/components/practice/ListeningPractice';
+import { GameCenter } from '@/components/practice/GameCenter';
+import { ProgressTracker } from '@/components/practice/ProgressTracker';
 
 export default function PracticePage() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -20,6 +35,16 @@ export default function PracticePage() {
         return <ReadingPractice onBack={() => setActiveSection(null)} />;
       case 'conversation':
         return <ConversationPractice onBack={() => setActiveSection(null)} />;
+      case 'vocabulary':
+        return <VocabularyPractice onBack={() => setActiveSection(null)} />;
+      case 'grammar':
+        return <GrammarPractice onBack={() => setActiveSection(null)} />;
+      case 'listening':
+        return <ListeningPractice onBack={() => setActiveSection(null)} />;
+      case 'games':
+        return <GameCenter onBack={() => setActiveSection(null)} />;
+      case 'progress':
+        return <ProgressTracker onBack={() => setActiveSection(null)} />;
       default:
         return null;
     }
@@ -39,15 +64,16 @@ export default function PracticePage() {
         >
           <h1 className="text-4xl font-bold text-gray-900">Practice Your Hebrew</h1>
           <p className="mt-4 text-xl text-gray-600">
-            Try our interactive practice tools
+            Choose from our comprehensive set of interactive practice tools
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Speaking Practice */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-8"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
           >
             <div className="flex items-center mb-4">
               <div className="p-3 bg-brand-100 rounded-lg">
@@ -64,10 +90,11 @@ export default function PracticePage() {
             </Button>
           </motion.div>
 
+          {/* Writing Practice */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-8"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
           >
             <div className="flex items-center mb-4">
               <div className="p-3 bg-brand-100 rounded-lg">
@@ -84,10 +111,11 @@ export default function PracticePage() {
             </Button>
           </motion.div>
 
+          {/* Reading Practice */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-8"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
           >
             <div className="flex items-center mb-4">
               <div className="p-3 bg-brand-100 rounded-lg">
@@ -104,10 +132,95 @@ export default function PracticePage() {
             </Button>
           </motion.div>
 
+          {/* Vocabulary Practice */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-xl shadow-lg p-8"
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+          >
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-brand-100 rounded-lg">
+                <PlaySquare className="h-6 w-6 text-brand-600" />
+              </div>
+              <h3 className="ml-4 text-xl font-bold text-gray-900">Vocabulary Flashcards</h3>
+            </div>
+            <p className="text-gray-600 mb-6">Master Hebrew vocabulary with interactive flashcards</p>
+            <Button 
+              className="w-full"
+              onClick={() => setActiveSection('vocabulary')}
+            >
+              Study Vocabulary
+            </Button>
+          </motion.div>
+
+          {/* Grammar Practice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+          >
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-brand-100 rounded-lg">
+                <GraduationCap className="h-6 w-6 text-brand-600" />
+              </div>
+              <h3 className="ml-4 text-xl font-bold text-gray-900">Grammar Exercises</h3>
+            </div>
+            <p className="text-gray-600 mb-6">Perfect your Hebrew grammar with targeted exercises</p>
+            <Button 
+              className="w-full"
+              onClick={() => setActiveSection('grammar')}
+            >
+              Practice Grammar
+            </Button>
+          </motion.div>
+
+          {/* Listening Practice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+          >
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-brand-100 rounded-lg">
+                <Headphones className="h-6 w-6 text-brand-600" />
+              </div>
+              <h3 className="ml-4 text-xl font-bold text-gray-900">Listening Practice</h3>
+            </div>
+            <p className="text-gray-600 mb-6">Improve your Hebrew listening comprehension</p>
+            <Button 
+              className="w-full"
+              onClick={() => setActiveSection('listening')}
+            >
+              Start Listening
+            </Button>
+          </motion.div>
+
+          {/* Interactive Games */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+          >
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-brand-100 rounded-lg">
+                <GamepadIcon className="h-6 w-6 text-brand-600" />
+              </div>
+              <h3 className="ml-4 text-xl font-bold text-gray-900">Learning Games</h3>
+            </div>
+            <p className="text-gray-600 mb-6">Learn Hebrew through fun interactive games</p>
+            <Button 
+              className="w-full"
+              onClick={() => setActiveSection('games')}
+            >
+              Play Games
+            </Button>
+          </motion.div>
+
+          {/* Conversation Practice */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
           >
             <div className="flex items-center mb-4">
               <div className="p-3 bg-brand-100 rounded-lg">
@@ -121,6 +234,27 @@ export default function PracticePage() {
               onClick={() => setActiveSection('conversation')}
             >
               Find Partners
+            </Button>
+          </motion.div>
+
+          {/* Progress Tracking */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow"
+          >
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-brand-100 rounded-lg">
+                <LineChart className="h-6 w-6 text-brand-600" />
+              </div>
+              <h3 className="ml-4 text-xl font-bold text-gray-900">Progress Tracker</h3>
+            </div>
+            <p className="text-gray-600 mb-6">Track your learning progress and achievements</p>
+            <Button 
+              className="w-full"
+              onClick={() => setActiveSection('progress')}
+            >
+              View Progress
             </Button>
           </motion.div>
         </div>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
-import { ArrowLeft, Volume2, BookOpen, Star, Award } from 'lucide-react';
+import { ArrowLeft, Volume2, BookOpen, Star } from 'lucide-react';
 import { useState } from 'react';
 import { useWindowSize } from 'react-use';
 import Confetti from 'react-confetti';
@@ -135,7 +135,7 @@ export function ReadingPractice({ onBack }: Props) {
           className="bg-white rounded-xl shadow-lg p-8"
         >
           <div className="flex items-center mb-8">
-            <Button variant="ghost" onClick={onBack} className="mr-4">
+            <Button variant="outline" onClick={onBack} className="mr-4">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <h2 className="text-2xl font-bold">Reading Practice</h2>
