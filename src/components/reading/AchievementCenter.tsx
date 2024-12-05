@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Award, Star, Trophy, Target } from 'lucide-react';
+import { Award, Star, Trophy, Target, BookOpen, Clock } from 'lucide-react';
 
 interface Achievement {
   id: string;
@@ -10,6 +10,7 @@ interface Achievement {
   unlocked: boolean;
   unlockedAt?: Date;
   xpReward: number;
+  category: string;
 }
 
 interface AchievementCenterProps {
@@ -18,7 +19,7 @@ interface AchievementCenterProps {
 
 export function AchievementCenter({ achievements }: AchievementCenterProps) {
   const categories = [
-    { id: 'reading', name: 'Reading Master', icon: Book },
+    { id: 'reading', name: 'Reading Master', icon: BookOpen },
     { id: 'streak', name: 'Consistency', icon: Target },
     { id: 'speed', name: 'Speed Reader', icon: Clock },
     { id: 'accuracy', name: 'Accuracy', icon: Star }

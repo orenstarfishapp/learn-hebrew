@@ -1,35 +1,46 @@
-import { ReadingLevel } from '@/types/reading';
+import type { ReadingLevel } from '@/types/reading';
 
 export const readingLevels: ReadingLevel[] = [
   {
-    id: 'level-1',
-    title: 'Beginner - Basic Sentences',
-    description: 'Simple sentences and basic vocabulary',
+    id: 'beginner',
+    title: 'Beginner Level',
+    name: 'Beginner',
+    description: 'Start your Hebrew journey with basic vocabulary and simple sentences.',
+    xpRequired: 0,
     stories: [
       {
-        id: 'story-1-1',
-        hebrew: 'דני הוא ילד שמח.',
-        transliteration: 'Dani hu yeled sameach.',
-        english: 'Danny is a happy boy.',
+        id: 'story-1',
+        title: 'First Day in Israel',
+        content: 'שלום! אני גר בישראל.\nאני לומד עברית כל יום.\nאני אוהב את השפה הזאת.',
+        transliteration: 'Shalom! Ani gar be\'Israel.\nAni lomed ivrit kol yom.\nAni ohev et hasafa hazot.',
+        translation: 'Hello! I live in Israel.\nI study Hebrew every day.\nI love this language.',
+        difficulty: 'beginner',
+        estimatedTime: 5,
+        points: 100,
+        vocabulary: [
+          {
+            word: 'שלום',
+            translation: 'hello, peace',
+            transliteration: 'shalom',
+            partOfSpeech: 'noun'
+          },
+          {
+            word: 'אני',
+            translation: 'I',
+            transliteration: 'ani',
+            partOfSpeech: 'pronoun'
+          }
+        ],
         questions: [
           {
             id: 'q1',
-            hebrew: 'איך מרגיש דני?',
-            transliteration: 'Eich margish Dani?',
-            english: 'How does Danny feel?',
+            type: 'multiple-choice',
+            question: 'What does שלום mean?',
+            correctAnswer: 'hello/peace',
             options: [
-              {
-                hebrew: 'דני מרגיש שמח.',
-                transliteration: 'Dani margish sameach.',
-                english: 'Danny feels happy.',
-                isCorrect: true
-              },
-              {
-                hebrew: 'דני מרגיש עצוב.',
-                transliteration: 'Dani margish atzuv.',
-                english: 'Danny feels sad.',
-                isCorrect: false
-              }
+              { text: 'hello/peace', isCorrect: true },
+              { text: 'goodbye', isCorrect: false },
+              { text: 'thank you', isCorrect: false }
             ]
           }
         ]
@@ -37,69 +48,45 @@ export const readingLevels: ReadingLevel[] = [
     ]
   },
   {
-    id: 'level-2',
-    title: 'Elementary - Simple Stories',
-    description: 'Short stories with basic plot',
+    id: 'intermediate',
+    title: 'Intermediate Level',
+    name: 'Intermediate',
+    description: 'Build your confidence with more complex sentences and conversations.',
+    xpRequired: 1000,
     stories: [
       {
-        id: 'story-2-1',
-        hebrew: 'דני אוהב לשחק עם הכלב שלו.',
-        transliteration: 'Dani ohev lesachek im hakelev shelo.',
-        english: 'Danny loves to play with his dog.',
-        questions: [
+        id: 'story-2',
+        title: 'At the Market',
+        content: 'אני הולך לשוק.\nאני קונה פירות וירקות.\nהכל טרי וטעים.',
+        transliteration: 'Ani holech lashuk.\nAni koneh peirot veyerakot.\nHakol tari veta\'im.',
+        translation: 'I go to the market.\nI buy fruits and vegetables.\nEverything is fresh and tasty.',
+        difficulty: 'intermediate',
+        estimatedTime: 10,
+        points: 200,
+        vocabulary: [
           {
-            id: 'q1',
-            hebrew: 'עם מי דני אוהב לשחק?',
-            transliteration: 'Im mi Dani ohev lesachek?',
-            english: 'With whom does Danny love to play?',
-            options: [
-              {
-                hebrew: 'דני אוהב לשחק עם הכלב שלו.',
-                transliteration: 'Dani ohev lesachek im hakelev shelo.',
-                english: 'Danny loves to play with his dog.',
-                isCorrect: true
-              },
-              {
-                hebrew: 'דני אוהב לשחק עם החתול שלו.',
-                transliteration: 'Dani ohev lesachek im hachatul shelo.',
-                english: 'Danny loves to play with his cat.',
-                isCorrect: false
-              }
-            ]
+            word: 'שוק',
+            translation: 'market',
+            transliteration: 'shuk',
+            partOfSpeech: 'noun'
+          },
+          {
+            word: 'פירות',
+            translation: 'fruits',
+            transliteration: 'peirot',
+            partOfSpeech: 'noun'
           }
-        ]
-      }
-    ]
-  },
-  {
-    id: 'level-3',
-    title: 'Intermediate - Complex Stories',
-    description: 'Longer stories with more complex vocabulary',
-    stories: [
-      {
-        id: 'story-3-1',
-        hebrew: 'יום אחד, דני והכלב שלו יצאו לטיול ביער.',
-        transliteration: 'Yom echad, Dani ve\'hakelev shelo yatzu letiyul ba\'yaar.',
-        english: 'One day, Danny and his dog went for a walk in the forest.',
+        ],
         questions: [
           {
             id: 'q1',
-            hebrew: 'לאן הלכו דני והכלב שלו?',
-            transliteration: 'Le\'an halchu Dani ve\'hakelev shelo?',
-            english: 'Where did Danny and his dog go?',
+            type: 'multiple-choice',
+            question: 'Where does the person go?',
+            correctAnswer: 'to the market',
             options: [
-              {
-                hebrew: 'הם יצאו לטיול ביער.',
-                transliteration: 'Hem yatzu letiyul ba\'yaar.',
-                english: 'They went for a walk in the forest.',
-                isCorrect: true
-              },
-              {
-                hebrew: 'הם הלכו לקניות בשוק.',
-                transliteration: 'Hem halchu likniyot ba\'shuk.',
-                english: 'They went shopping at the market.',
-                isCorrect: false
-              }
+              { text: 'to the market', isCorrect: true },
+              { text: 'to school', isCorrect: false },
+              { text: 'to work', isCorrect: false }
             ]
           }
         ]

@@ -1,4 +1,4 @@
-import { BookOpen, Globe, MessageCircle, Trophy, Zap, Users, Target, Star } from 'lucide-react';
+import { BookOpen, Globe, Zap, Users, Target, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [

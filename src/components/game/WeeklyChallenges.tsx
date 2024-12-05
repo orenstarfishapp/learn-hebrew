@@ -1,91 +1,100 @@
-import { motion } from 'framer-motion';
-import { Target, Clock, Award } from 'lucide-react';
-import { useGameStore } from '@/store/gameStore';
-import { useState, useEffect } from 'react';
-import { WeeklyChallenge } from '@/types/leaderboard';
+import { useState } from 'react';
 import { Button } from '../ui/button';
+import { Trophy, Star, ChevronLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export function WeeklyChallenges() {
-  const [challenges, setChallenges] = useState<WeeklyChallenge[]>([]);
-  const getWeeklyChallenges = useGameStore(state => state.getWeeklyChallenges);
+interface WeeklyChallengesProps {
+  onBack?: () => void;
+}
 
-  useEffect(() => {
-    const fetchChallenges = async () => {
-      const data = await getWeeklyChallenges();
-      setChallenges(data);
-    };
-    fetchChallenges();
-  }, []);
+interface Challenge {
+  id: number;
+  title: string;
+  description: string;
+  points: number;
+  completed: boolean;
+  deadline: string;
+}
 
-  const getTimeRemaining = (endDate: Date) => {
-    const now = new Date();
-    const diff = endDate.getTime() - now.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    return `${days}d ${hours}h remaining`;
-  };
+const sampleChallenges: Challenge[] = [
+  {
+    id: 1,
+    title: 'Daily Conversation Master',
+    description: 'Complete 5 conversation practice sessions',
+    points: 100,
+    completed: false,
+    deadline: '2024-02-01'
+  },
+  {
+    id: 2,
+    title: 'Vocabulary Champion',
+    description: 'Learn 20 new words this week',
+    points: 150,
+    completed: false,
+    deadline: '2024-02-01'
+  },
+  {
+    id: 3,
+    title: 'Perfect Pronunciation',
+    description: 'Record and submit 10 pronunciation exercises',
+    points: 200,
+    completed: false,
+    deadline: '2024-02-01'
+  }
+];
+
+export const WeeklyChallenges: React.FC<WeeklyChallengesProps> = ({ onBack }) => {
+  const [challenges] = useState<Challenge[]>(sampleChallenges);
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
-      <h2 className="text-2xl font-bold mb-6">Weekly Challenges</h2>
+    <div className="flex flex-col min-h-screen bg-background p-4">
+      <div className="max-w-4xl mx-auto w-full">
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center space-x-2">
+            <Trophy className="h-8 w-8 text-yellow-500" />
+            <h2 className="text-3xl font-bold">Weekly Challenges</h2>
+          </div>
+          {onBack && (
+            <Button variant="secondary" onClick={onBack}>
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
+          )}
+        </div>
 
-      <div className="space-y-6">
-        {challenges.map((challenge, index) => (
-          <motion.div
-            key={challenge.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="relative"
-          >
-            <div className="absolute -inset-px bg-gradient-to-r from-brand-500 to-blue-500 rounded-xl blur opacity-25" />
-            <div className="relative bg-white p-6 rounded-xl border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <Target className="w-6 h-6 text-brand-600 mr-3" />
-                  <h3 className="text-lg font-semibold">{challenge.title}</h3>
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {getTimeRemaining(challenge.endDate)}
-                </div>
-              </div>
-
-              <p className="text-gray-600 mb-4">{challenge.description}</p>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <Award className="w-5 h-5 text-yellow-400 mr-2" />
-                  <span className="font-semibold text-brand-600">
-                    {challenge.xpReward} XP
-                  </span>
-                </div>
-
-                {challenge.progress !== undefined && (
-                  <div className="flex items-center">
-                    <div className="w-32 h-2 bg-gray-200 rounded-full mr-3">
-                      <div
-                        className="h-full bg-brand-500 rounded-full"
-                        style={{ width: `${(challenge.progress / challenge.requirement.count) * 100}%` }}
-                      />
-                    </div>
-                    <span className="text-sm text-gray-600">
-                      {challenge.progress}/{challenge.requirement.count}
+        <div className="grid gap-6">
+          {challenges.map((challenge) => (
+            <motion.div
+              key={challenge.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-card rounded-lg shadow-lg p-6"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">{challenge.title}</h3>
+                  <p className="text-muted-foreground mb-4">{challenge.description}</p>
+                  <div className="flex items-center space-x-4">
+                    <span className="flex items-center text-yellow-500">
+                      <Star className="h-4 w-4 mr-1" />
+                      {challenge.points} points
+                    </span>
+                    <span className="text-muted-foreground">
+                      Deadline: {new Date(challenge.deadline).toLocaleDateString()}
                     </span>
                   </div>
-                )}
-
+                </div>
                 <Button
-                  variant={challenge.completed ? 'outline' : 'default'}
+                  variant={challenge.completed ? 'outline' : 'primary'}
                   disabled={challenge.completed}
                 >
                   {challenge.completed ? 'Completed' : 'Start Challenge'}
                 </Button>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </div>
     </div>
   );
-}
+};

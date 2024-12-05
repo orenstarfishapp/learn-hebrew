@@ -2,9 +2,20 @@ export interface Question {
   id: string;
   type: 'multiple-choice' | 'text-input';
   question: string;
-  options?: string[];
+  hebrew?: string;
+  transliteration?: string;
+  english?: string;
+  options?: Answer[];
   correctAnswer: string;
   explanation?: string;
+}
+
+export interface Answer {
+  text: string;
+  hebrew?: string;
+  transliteration?: string;
+  english?: string;
+  isCorrect: boolean;
 }
 
 export interface HebrewLetter {

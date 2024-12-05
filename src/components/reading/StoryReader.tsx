@@ -1,29 +1,13 @@
-import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
-import { ArrowLeft, Volume2, BookOpen, HelpCircle } from 'lucide-react';
 import { useState } from 'react';
-import { useWindowSize } from 'react-use';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Volume2, BookOpen } from 'lucide-react';
+import type { Story } from '@/types/reading';
 import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 interface StoryReaderProps {
-  story: {
-    hebrew: string;
-    transliteration: string;
-    english: string;
-    questions: Array<{
-      id: string;
-      hebrew: string;
-      transliteration: string;
-      english: string;
-      options: Array<{
-        hebrew: string;
-        transliteration: string;
-        english: string;
-        isCorrect: boolean;
-      }>;
-    }>;
-  };
-  onBack: () => void;
+  story: Story;
+  onBack?: () => void;
   onComplete: (score: number) => void;
 }
 
@@ -32,174 +16,195 @@ export function StoryReader({ story, onBack, onComplete }: StoryReaderProps) {
   const [showTranslation, setShowTranslation] = useState(false);
   const [showTransliteration, setShowTransliteration] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [score, setScore] = useState(0);
 
   const handleStartQuiz = () => {
     setCurrentQuestionIndex(0);
   };
 
   const handleSubmitAnswer = () => {
-    if (selectedAnswer === null || currentQuestionIndex === null) return;
+    if (currentQuestionIndex === null || !story.questions[currentQuestionIndex]) return;
 
-    const isCorrect = story.questions[currentQuestionIndex].options[selectedAnswer].isCorrect;
+    const currentQuestion = story.questions[currentQuestionIndex];
+    
+    if (selectedAnswer === null || !currentQuestion.options) return;
+    
+    const isCorrect = currentQuestion.options.find(option => option.text === selectedAnswer)?.isCorrect;
     
     if (isCorrect) {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
+      setScore(score + 1);
     }
-    
-    setShowResult(true);
   };
 
   const handleNext = () => {
     if (currentQuestionIndex === null) return;
     
-    if (currentQuestionIndex < story.questions.length - 1) {
+    if (currentQuestionIndex < (story.questions?.length ?? 0) - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
-      setShowResult(false);
     } else {
       // Calculate final score
-      const score = 100; // Implement actual score calculation
-      onComplete(score);
+      const finalScore = (score / (story.questions?.length ?? 1)) * 100;
+      onComplete(finalScore);
     }
   };
 
+  const playAudio = () => {
+    if (!story.content) return;
+    const utterance = new SpeechSynthesisUtterance(story.content);
+    utterance.lang = 'he-IL';
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleAnswerSelect = (answer: string) => {
+    setSelectedAnswer(answer);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="flex flex-col min-h-screen bg-gray-50 p-4">
       {showConfetti && <Confetti width={width} height={height} />}
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-8"
-        >
-          <div className="flex items-center mb-8">
-            <Button variant="ghost" onClick={onBack} className="mr-4">
-              <ArrowLeft className="h-5 w-5" />
+      <div className="max-w-4xl mx-auto w-full">
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center space-x-2">
+            <BookOpen className="h-8 w-8 text-primary" />
+            <h2 className="text-3xl font-bold">Reading Practice</h2>
+          </div>
+          {onBack && (
+            <Button variant="secondary" onClick={onBack}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
             </Button>
-            <h2 className="text-2xl font-bold">Reading Practice</h2>
+          )}
+        </div>
+
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <div className="flex justify-between items-start mb-6">
+            <h3 className="text-2xl font-bold">{story.title}</h3>
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+              <Button
+                variant="primary"
+                onClick={() => setShowTransliteration(!showTransliteration)}
+              >
+                {showTransliteration ? 'Hide' : 'Show'} Transliteration
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => setShowTranslation(!showTranslation)}
+              >
+                {showTranslation ? 'Hide' : 'Show'} Translation
+              </Button>
+            </div>
           </div>
 
-          {currentQuestionIndex === null ? (
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <div className="text-2xl" dir="rtl">{story.hebrew}</div>
-                
-                <div className="flex gap-4">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowTransliteration(!showTransliteration)}
-                    className="flex items-center"
-                  >
-                    <HelpCircle className="h-5 w-5 mr-2" />
-                    {showTransliteration ? 'Hide' : 'Show'} Transliteration
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowTranslation(!showTranslation)}
-                    className="flex items-center"
-                  >
-                    <BookOpen className="h-5 w-5 mr-2" />
-                    {showTranslation ? 'Hide' : 'Show'} Translation
-                  </Button>
-                </div>
-
-                {showTransliteration && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-gray-600 italic"
-                  >
-                    {story.transliteration}
-                  </motion.div>
-                )}
-
-                {showTranslation && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-gray-600"
-                  >
-                    {story.english}
-                  </motion.div>
-                )}
-              </div>
-
-              <div className="flex justify-end">
-                <Button onClick={handleStartQuiz}>Start Questions</Button>
-              </div>
+          <div className="space-y-8">
+            <div
+              className="text-right text-xl leading-relaxed"
+              dir="rtl"
+            >
+              {story.content?.split('\n').map((line, index) => (
+                <p key={index} className="mb-4">
+                  {line}
+                </p>
+              ))}
             </div>
-          ) : (
-            <div className="space-y-8">
+
+            {showTransliteration && story.transliteration && (
+              <div
+                className="text-gray-600 italic"
+              >
+                {story.transliteration}
+              </div>
+            )}
+
+            {showTranslation && story.translation && (
+              <div
+                className="text-left text-lg text-muted-foreground leading-relaxed"
+              >
+                {story.translation.split('\n').map((line, index) => (
+                  <p key={index} className="mb-4">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {currentQuestionIndex === null ? (
+          <div className="flex justify-center space-x-4">
+            <Button
+              variant="primary"
+              onClick={handleStartQuiz}
+            >
+              Start Questions
+            </Button>
+
+            <Button
+              variant="primary"
+              onClick={playAudio}
+            >
+              <Volume2 className="mr-2 h-4 w-4" />
+              Play Audio
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-8">
+            {story.questions && story.questions[currentQuestionIndex] && (
               <div className="space-y-4">
                 <h3 className="text-xl font-semibold">
                   Question {currentQuestionIndex + 1} of {story.questions.length}
                 </h3>
                 
-                <div className="text-lg" dir="rtl">
-                  {story.questions[currentQuestionIndex].hebrew}
-                </div>
-                
-                <div className="text-gray-600">
-                  {story.questions[currentQuestionIndex].english}
+                <div className="mb-6">
+                  <h3 className="text-xl font-bold mb-4">
+                    {story.questions[currentQuestionIndex].question}
+                  </h3>
                 </div>
 
-                <div className="space-y-4 mt-6">
-                  {story.questions[currentQuestionIndex].options.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedAnswer(index)}
-                      className={`w-full p-4 text-right rounded-lg border-2 transition-colors ${
-                        selectedAnswer === index
-                          ? 'border-brand-500 bg-brand-50'
-                          : 'border-gray-200 hover:border-brand-300'
-                      }`}
-                      dir="rtl"
+                <div className="space-y-3">
+                  {story.questions[currentQuestionIndex].options.map((option) => (
+                    <Button
+                      key={option.text}
+                      onClick={() => handleAnswerSelect(option.text)}
+                      className="w-full justify-start text-left"
+                      variant={
+                        selectedAnswer === option.text
+                          ? option.isCorrect
+                            ? "primary"
+                            : "destructive"
+                          : "outline"
+                      }
+                      disabled={selectedAnswer !== null}
                     >
-                      <div>{option.hebrew}</div>
-                      <div className="text-sm text-gray-600 text-left">
-                        {option.english}
-                      </div>
-                    </button>
+                      {option.text}
+                    </Button>
                   ))}
                 </div>
-              </div>
 
-              {showResult && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`p-4 rounded-lg ${
-                    story.questions[currentQuestionIndex].options[selectedAnswer!].isCorrect
-                      ? 'bg-green-50 text-green-700'
-                      : 'bg-red-50 text-red-700'
-                  }`}
-                >
-                  {story.questions[currentQuestionIndex].options[selectedAnswer!].isCorrect
-                    ? 'Correct! Well done!'
-                    : 'Not quite right. Try again!'}
-                </motion.div>
-              )}
-
-              <div className="flex justify-end">
-                {!showResult ? (
-                  <Button onClick={handleSubmitAnswer} disabled={selectedAnswer === null}>
-                    Submit Answer
+                <div className="flex justify-end space-x-4 mt-8">
+                  <Button
+                    variant="primary"
+                    onClick={handleSubmitAnswer}
+                    disabled={selectedAnswer === null}
+                  >
+                    Submit
                   </Button>
-                ) : (
-                  <Button onClick={handleNext}>
-                    {currentQuestionIndex < story.questions.length - 1 ? 'Next Question' : 'Complete'}
+                  <Button
+                    variant="secondary"
+                    onClick={handleNext}
+                  >
+                    Next Question
                   </Button>
-                )}
+                </div>
               </div>
-            </div>
-          )}
-        </motion.div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

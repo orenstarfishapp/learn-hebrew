@@ -1,266 +1,158 @@
-import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
-import { ArrowLeft, MessageCircle, Clock, Globe, Plus, ThumbsUp, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
-import { useWindowSize } from 'react-use';
-import Confetti from 'react-confetti';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, Mic, Volume2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-interface Post {
-  id: string;
-  userId: string;
-  userName: string;
-  userAvatar: string;
-  title: string;
-  description: string;
-  topics: string[];
-  languages: string[];
-  availability: string;
-  createdAt: Date;
-  likes: number;
-  comments: number;
-  hasLiked?: boolean;
+interface ConversationPracticeProps {
+  onBack?: () => void;
 }
 
-interface Props {
-  onBack: () => void;
+interface Dialogue {
+  id: number;
+  hebrew: string;
+  english: string;
+  audio?: string;
+  speaker: 'user' | 'ai';
 }
 
-const samplePosts: Post[] = [
+const sampleDialogues: Dialogue[] = [
   {
-    id: '1',
-    userId: '1',
-    userName: 'Yael Cohen',
-    userAvatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    title: 'Looking for English-Hebrew exchange partner',
-    description: 'Native Hebrew speaker looking to practice English. Happy to help with Hebrew in return!',
-    topics: ['Daily Conversation', 'Culture'],
-    languages: ['Hebrew', 'English'],
-    availability: 'Evenings GMT+2',
-    createdAt: new Date(),
-    likes: 5,
-    comments: 2
+    id: 1,
+    hebrew: 'שָׁלוֹם! מַה שְׁלוֹמְךָ?',
+    english: 'Hello! How are you?',
+    speaker: 'ai'
   },
   {
-    id: '2',
-    userId: '2',
-    userName: 'David Levi',
-    userAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-    title: 'Hebrew practice group forming',
-    description: 'Starting a small group for Hebrew conversation practice. All levels welcome!',
-    topics: ['Group Practice', 'Beginner Friendly'],
-    languages: ['Hebrew'],
-    availability: 'Weekends',
-    createdAt: new Date(),
-    likes: 8,
-    comments: 4
+    id: 2,
+    hebrew: 'שָׁלוֹם, אֲנִי בְּסֵדֶר, תּוֹדָה. וְאַתָּה?',
+    english: 'Hello, I\'m fine, thanks. And you?',
+    speaker: 'user'
+  },
+  {
+    id: 3,
+    hebrew: 'גַּם אֲנִי בְּסֵדֶר. מֵאֵיפֹה אַתָּה?',
+    english: 'I\'m also fine. Where are you from?',
+    speaker: 'ai'
   }
 ];
 
-export function ConversationPractice({ onBack }: Props) {
-  const { width, height } = useWindowSize();
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [showNewPostForm, setShowNewPostForm] = useState(false);
-  const [posts, setPosts] = useState<Post[]>(samplePosts);
-  const [newPost, setNewPost] = useState({
-    title: '',
-    description: '',
-    topics: [] as string[],
-    languages: [] as string[],
-    availability: ''
-  });
+export const ConversationPractice: React.FC<ConversationPracticeProps> = ({ onBack }) => {
+  const [currentDialogueIndex, setCurrentDialogueIndex] = useState(0);
+  const [showTranslation, setShowTranslation] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
 
-  const handleCreatePost = () => {
-    const post: Post = {
-      id: Date.now().toString(),
-      userId: 'current-user',
-      userName: 'Current User',
-      userAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      title: newPost.title,
-      description: newPost.description,
-      topics: newPost.topics,
-      languages: newPost.languages,
-      availability: newPost.availability,
-      createdAt: new Date(),
-      likes: 0,
-      comments: 0
-    };
-
-    setPosts([post, ...posts]);
-    setShowNewPostForm(false);
-    setNewPost({
-      title: '',
-      description: '',
-      topics: [],
-      languages: [],
-      availability: ''
-    });
-    
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 3000);
+  const handleNext = () => {
+    if (currentDialogueIndex < sampleDialogues.length - 1) {
+      setCurrentDialogueIndex(prev => prev + 1);
+      setShowTranslation(false);
+    }
   };
 
-  const handleLike = (postId: string) => {
-    setPosts(posts.map(post => {
-      if (post.id === postId) {
-        return {
-          ...post,
-          likes: post.hasLiked ? post.likes - 1 : post.likes + 1,
-          hasLiked: !post.hasLiked
-        };
-      }
-      return post;
-    }));
+  const handlePrevious = () => {
+    if (currentDialogueIndex > 0) {
+      setCurrentDialogueIndex(prev => prev - 1);
+      setShowTranslation(false);
+    }
+  };
+
+  const toggleRecording = () => {
+    setIsRecording(!isRecording);
+    // Implement actual recording logic here
+  };
+
+  const playAudio = () => {
+    const utterance = new SpeechSynthesisUtterance(sampleDialogues[currentDialogueIndex].hebrew);
+    utterance.lang = 'he-IL';
+    window.speechSynthesis.speak(utterance);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      {showConfetti && <Confetti width={width} height={height} />}
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-8"
-        >
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center">
-              <Button variant="ghost" onClick={onBack} className="mr-4">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <h2 className="text-2xl font-bold">Language Exchange</h2>
-            </div>
-            <Button onClick={() => setShowNewPostForm(true)} className="flex items-center">
-              <Plus className="h-4 w-4 mr-2" />
-              Create Post
+    <div className="flex flex-col min-h-screen bg-background p-4">
+      <div className="max-w-4xl mx-auto w-full">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold">Conversation Practice</h2>
+          {onBack && (
+            <Button variant="secondary" onClick={onBack}>
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back
             </Button>
-          </div>
+          )}
+        </div>
 
-          {showNewPostForm ? (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-8 p-6 border-2 border-brand-100 rounded-xl"
-            >
-              <h3 className="text-xl font-semibold mb-4">Create New Post</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    value={newPost.title}
-                    onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-                    className="w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Description
-                  </label>
-                  <textarea
-                    value={newPost.description}
-                    onChange={(e) => setNewPost({ ...newPost, description: e.target.value })}
-                    rows={3}
-                    className="w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Availability
-                  </label>
-                  <input
-                    type="text"
-                    value={newPost.availability}
-                    onChange={(e) => setNewPost({ ...newPost, availability: e.target.value })}
-                    className="w-full rounded-lg border-gray-300 focus:border-brand-500 focus:ring-brand-500"
-                    placeholder="e.g., Evenings GMT+2, Weekends"
-                  />
-                </div>
-                <div className="flex justify-end gap-4">
-                  <Button variant="outline" onClick={() => setShowNewPostForm(false)}>
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreatePost}>
-                    Post
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ) : null}
-
-          <div className="space-y-6">
-            {posts.map((post, index) => (
+        <div className="bg-card rounded-lg shadow-lg p-8 mb-8">
+          <div className="flex flex-col space-y-6">
+            {sampleDialogues.map((dialogue, index) => (
               <motion.div
-                key={post.id}
+                key={dialogue.id}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="p-6 border border-gray-200 rounded-xl hover:shadow-md transition-shadow"
+                animate={{ 
+                  opacity: index <= currentDialogueIndex ? 1 : 0.3,
+                  y: 0 
+                }}
+                className={`flex ${dialogue.speaker === 'ai' ? 'justify-start' : 'justify-end'}`}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center">
-                    <img
-                      src={post.userAvatar}
-                      alt={post.userName}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div className="ml-3">
-                      <h3 className="font-semibold">{post.userName}</h3>
-                      <p className="text-sm text-gray-500">
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <MessageCircle className="h-4 w-4 mr-1" />
-                    Connect
-                  </Button>
-                </div>
-
-                <div className="mt-4">
-                  <h4 className="text-lg font-semibold">{post.title}</h4>
-                  <p className="mt-2 text-gray-600">{post.description}</p>
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {post.topics.map((topic) => (
-                    <span
-                      key={topic}
-                      className="px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-sm"
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-4 flex items-center text-sm text-gray-500">
-                  <Globe className="h-4 w-4 mr-1" />
-                  {post.languages.join(', ')}
-                  <Clock className="h-4 w-4 ml-4 mr-1" />
-                  {post.availability}
-                </div>
-
-                <div className="mt-4 flex items-center gap-4 pt-4 border-t">
-                  <button
-                    onClick={() => handleLike(post.id)}
-                    className={`flex items-center gap-1 text-sm ${
-                      post.hasLiked ? 'text-brand-600' : 'text-gray-500'
-                    }`}
-                  >
-                    <ThumbsUp className="h-4 w-4" />
-                    {post.likes}
-                  </button>
-                  <button className="flex items-center gap-1 text-sm text-gray-500">
-                    <MessageSquare className="h-4 w-4" />
-                    {post.comments}
-                  </button>
+                <div 
+                  className={`max-w-[80%] p-4 rounded-lg ${
+                    dialogue.speaker === 'ai' 
+                      ? 'bg-primary text-primary-foreground' 
+                      : 'bg-secondary text-secondary-foreground'
+                  }`}
+                >
+                  <p className="text-lg font-medium mb-2">{dialogue.hebrew}</p>
+                  {(showTranslation || index < currentDialogueIndex) && (
+                    <p className="text-sm opacity-80">{dialogue.english}</p>
+                  )}
                 </div>
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
+
+        <div className="flex justify-center space-x-4">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            disabled={currentDialogueIndex === 0}
+          >
+            Previous
+          </Button>
+          
+          <Button
+            variant="primary"
+            onClick={() => setShowTranslation(!showTranslation)}
+          >
+            {showTranslation ? 'Hide' : 'Show'} Translation
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={playAudio}
+          >
+            <Volume2 className="mr-2 h-4 w-4" />
+            Play Audio
+          </Button>
+
+          <Button
+            variant={isRecording ? 'secondary' : 'primary'}
+            onClick={toggleRecording}
+          >
+            <Mic className={`mr-2 h-4 w-4 ${isRecording ? 'text-red-500' : ''}`} />
+            {isRecording ? 'Stop Recording' : 'Start Recording'}
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleNext}
+            disabled={currentDialogueIndex === sampleDialogues.length - 1}
+          >
+            Next
+          </Button>
+        </div>
+
+        <div className="mt-8 text-center text-sm text-muted-foreground">
+          Dialogue {currentDialogueIndex + 1} of {sampleDialogues.length}
+        </div>
       </div>
     </div>
   );
-}
+};

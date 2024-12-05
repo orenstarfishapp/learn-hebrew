@@ -12,13 +12,13 @@ import {
   LineChart 
 } from 'lucide-react';
 import { useState } from 'react';
-import { SpeakingPractice } from '@/components/practice/SpeakingPractice';
-import { WritingPractice } from '@/components/practice/WritingPractice';
-import { ReadingPractice } from '@/components/practice/ReadingPractice';
-import { ConversationPractice } from '@/components/practice/ConversationPractice';
 import { VocabularyPractice } from '@/components/practice/VocabularyPractice';
-import { GrammarPractice } from '@/components/practice/GrammarPractice';
+import { ReadingPractice } from '@/components/practice/ReadingPractice';
+import { WritingPractice } from '@/components/practice/WritingPractice';
 import { ListeningPractice } from '@/components/practice/ListeningPractice';
+import { SpeakingPractice } from '@/components/practice/SpeakingPractice';
+import { ConversationPractice } from '@/components/practice/ConversationPractice';
+import { GrammarPractice } from '@/components/practice/GrammarPractice';
 import { GameCenter } from '@/components/practice/GameCenter';
 import { ProgressTracker } from '@/components/practice/ProgressTracker';
 

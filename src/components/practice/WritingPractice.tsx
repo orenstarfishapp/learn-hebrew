@@ -1,137 +1,181 @@
-import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
-import { ArrowLeft, Check, HelpCircle, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
-import Confetti from 'react-confetti';
-import { useWindowSize } from 'react-use';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, Volume2, Check, X } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-interface Props {
-  onBack: () => void;
+interface WritingPracticeProps {
+  onBack?: () => void;
 }
 
-const exercises = [
+interface Exercise {
+  id: number;
+  hebrew: string;
+  english: string;
+  audio?: string;
+}
+
+const sampleExercises: Exercise[] = [
   {
-    id: '1',
-    prompt: 'Write the following in Hebrew: "Hello, how are you?"',
-    answer: 'שלום, מה שלומך?',
-    hint: 'Start with שלום (shalom)'
+    id: 1,
+    hebrew: 'שָׁלוֹם',
+    english: 'Hello',
   },
   {
-    id: '2',
-    prompt: 'Write the following in Hebrew: "My name is..."',
-    answer: 'קוראים לי...',
-    hint: 'Use קוראים לי (korim li)'
+    id: 2,
+    hebrew: 'תּוֹדָה רַבָּה',
+    english: 'Thank you very much',
+  },
+  {
+    id: 3,
+    hebrew: 'בְּבַקָּשָׁה',
+    english: 'Please / You\'re welcome',
   }
 ];
 
-export function WritingPractice({ onBack }: Props) {
-  const { width, height } = useWindowSize();
-  const [currentExercise, setCurrentExercise] = useState(0);
+export const WritingPractice: React.FC<WritingPracticeProps> = ({ onBack }) => {
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [userInput, setUserInput] = useState('');
-  const [showHint, setShowHint] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const [result, setResult] = useState<'correct' | 'incorrect' | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  const handleSubmit = () => {
-    const isCorrect = userInput === exercises[currentExercise].answer;
-    setResult(isCorrect ? 'correct' : 'incorrect');
-    if (isCorrect) {
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 3000);
+  const handleNext = () => {
+    if (currentExerciseIndex < sampleExercises.length - 1) {
+      setCurrentExerciseIndex(prev => prev + 1);
+      setUserInput('');
+      setShowAnswer(false);
+      setIsCorrect(null);
     }
   };
 
-  const handleNext = () => {
-    if (currentExercise < exercises.length - 1) {
-      setCurrentExercise(currentExercise + 1);
+  const handlePrevious = () => {
+    if (currentExerciseIndex > 0) {
+      setCurrentExerciseIndex(prev => prev - 1);
       setUserInput('');
-      setShowHint(false);
-      setResult(null);
+      setShowAnswer(false);
+      setIsCorrect(null);
     }
+  };
+
+  const checkAnswer = () => {
+    const correct = userInput.trim() === sampleExercises[currentExerciseIndex].hebrew;
+    setIsCorrect(correct);
+    if (!correct) {
+      setShowAnswer(true);
+    }
+  };
+
+  const playAudio = () => {
+    const utterance = new SpeechSynthesisUtterance(sampleExercises[currentExerciseIndex].hebrew);
+    utterance.lang = 'he-IL';
+    window.speechSynthesis.speak(utterance);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      {showConfetti && <Confetti width={width} height={height} />}
-      
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-8"
-        >
-          <div className="flex items-center mb-8">
-            <Button variant="ghost" onClick={onBack} className="mr-4">
-              <ArrowLeft className="h-5 w-5" />
+    <div className="flex flex-col min-h-screen bg-background p-4">
+      <div className="max-w-4xl mx-auto w-full">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-3xl font-bold">Writing Practice</h2>
+          {onBack && (
+            <Button variant="secondary" onClick={onBack}>
+              <ChevronLeft className="mr-2 h-4 w-4" />
+              Back
             </Button>
-            <h2 className="text-2xl font-bold">Writing Practice</h2>
-          </div>
+          )}
+        </div>
 
-          <div className="space-y-6">
-            <div className="text-lg">{exercises[currentExercise].prompt}</div>
-
-            {showHint && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-brand-50 p-4 rounded-lg text-brand-700"
-              >
-                <HelpCircle className="inline-block h-5 w-5 mr-2" />
-                {exercises[currentExercise].hint}
-              </motion.div>
-            )}
-
-            <div>
-              <textarea
+        <div className="bg-card rounded-lg shadow-lg p-8 mb-8">
+          <motion.div
+            key={currentExerciseIndex}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center"
+          >
+            <h3 className="text-2xl font-bold mb-4">
+              Write the Hebrew for:
+            </h3>
+            <p className="text-3xl text-primary mb-8">
+              {sampleExercises[currentExerciseIndex].english}
+            </p>
+            
+            <div className="max-w-md mx-auto">
+              <input
+                type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                className="w-full h-32 p-4 border rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                placeholder="Type your answer here..."
+                className="w-full p-4 text-2xl text-right border rounded-lg focus:ring-2 focus:ring-primary"
                 dir="rtl"
+                placeholder="Type in Hebrew..."
               />
+
+              {isCorrect !== null && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className={`mt-4 text-xl ${isCorrect ? 'text-green-500' : 'text-red-500'}`}
+                >
+                  {isCorrect ? (
+                    <span className="flex items-center justify-center">
+                      <Check className="mr-2" /> Correct!
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center">
+                      <X className="mr-2" /> Try again
+                    </span>
+                  )}
+                </motion.div>
+              )}
+
+              {showAnswer && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-4 text-xl text-muted-foreground"
+                >
+                  Correct answer: {sampleExercises[currentExerciseIndex].hebrew}
+                </motion.div>
+              )}
             </div>
+          </motion.div>
+        </div>
 
-            {result && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`p-4 rounded-lg ${
-                  result === 'correct'
-                    ? 'bg-green-50 text-green-700'
-                    : 'bg-red-50 text-red-700'
-                }`}
-              >
-                {result === 'correct' ? (
-                  <Check className="inline-block h-5 w-5 mr-2" />
-                ) : (
-                  <RefreshCw className="inline-block h-5 w-5 mr-2" />
-                )}
-                {result === 'correct'
-                  ? 'Correct! Well done!'
-                  : 'Not quite right. Try again!'}
-              </motion.div>
-            )}
+        <div className="flex justify-center space-x-4">
+          <Button
+            variant="outline"
+            onClick={handlePrevious}
+            disabled={currentExerciseIndex === 0}
+          >
+            Previous
+          </Button>
 
-            <div className="flex justify-between">
-              <Button
-                variant="outline"
-                onClick={() => setShowHint(!showHint)}
-                className="flex items-center"
-              >
-                <HelpCircle className="h-5 w-5 mr-2" />
-                {showHint ? 'Hide Hint' : 'Show Hint'}
-              </Button>
+          <Button
+            variant="primary"
+            onClick={playAudio}
+          >
+            <Volume2 className="mr-2 h-4 w-4" />
+            Play Audio
+          </Button>
 
-              <div className="space-x-4">
-                <Button onClick={handleSubmit}>Check Answer</Button>
-                {result === 'correct' && (
-                  <Button onClick={handleNext}>Next Exercise</Button>
-                )}
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          <Button
+            variant="primary"
+            onClick={checkAnswer}
+            disabled={!userInput.trim()}
+          >
+            Check Answer
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={handleNext}
+            disabled={currentExerciseIndex === sampleExercises.length - 1}
+          >
+            Next
+          </Button>
+        </div>
+
+        <div className="mt-8 text-center text-sm text-muted-foreground">
+          Exercise {currentExerciseIndex + 1} of {sampleExercises.length}
+        </div>
       </div>
     </div>
   );
-}
+};

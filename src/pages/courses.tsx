@@ -1,98 +1,99 @@
-import { Book, Clock, Globe, Star, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Clock, Globe, Star, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const courses = [
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  level: string;
+  duration: string;
+  students: number;
+  rating: number;
+  image: string;
+}
+
+const courses: Course[] = [
   {
-    title: 'Hebrew Alphabet Mastery',
+    id: 'beginner',
+    title: 'Beginner Hebrew',
+    description: 'Start your Hebrew journey with basic vocabulary and simple sentences.',
     level: 'Beginner',
-    duration: '4 weeks',
-    students: 1200,
+    duration: '3 months',
+    students: 1234,
     rating: 4.8,
-    description: 'Master the Hebrew alphabet, vowels, and basic reading skills.',
-    image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    image: '/courses/beginner.jpg'
   },
   {
-    title: 'Conversational Hebrew',
+    id: 'intermediate',
+    title: 'Intermediate Hebrew',
+    description: 'Build your confidence with more complex sentences and conversations.',
     level: 'Intermediate',
-    duration: '8 weeks',
-    students: 850,
+    duration: '4 months',
+    students: 856,
     rating: 4.9,
-    description: 'Develop practical speaking skills for everyday situations.',
-    image: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    image: '/courses/intermediate.jpg'
   },
   {
-    title: 'Business Hebrew',
+    id: 'advanced',
+    title: 'Advanced Hebrew',
+    description: 'Master Hebrew with advanced grammar, idioms, and cultural context.',
     level: 'Advanced',
-    duration: '12 weeks',
-    students: 450,
+    duration: '6 months',
+    students: 432,
     rating: 4.7,
-    description: 'Learn professional Hebrew for business environments.',
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    image: '/courses/advanced.jpg'
   }
 ];
 
 export default function CoursesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl font-bold text-gray-900">Our Hebrew Courses</h1>
-          <p className="mt-4 text-xl text-gray-600">
-            Structured learning paths for every level
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course) => (
-            <motion.div
-              key={course.title}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden"
-            >
-              <div className="aspect-w-16 aspect-h-9">
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-48 object-cover"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900">{course.title}</h3>
-                <p className="mt-2 text-gray-600">{course.description}</p>
-                
-                <div className="mt-4 grid grid-cols-2 gap-4">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="h-4 w-4 mr-2" />
-                    {course.duration}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Globe className="h-4 w-4 mr-2" />
-                    {course.level}
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Users className="h-4 w-4 mr-2" />
-                    {course.students} students
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Star className="h-4 w-4 mr-2 text-yellow-400" />
-                    {course.rating}
-                  </div>
+    <div className="container mx-auto py-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        {courses.map((course) => (
+          <motion.div
+            key={course.id}
+            whileHover={{ scale: 1.02 }}
+            className="bg-white rounded-xl shadow-lg overflow-hidden"
+          >
+            <div
+              className="h-48 bg-cover bg-center"
+              style={{ backgroundImage: `url(${course.image})` }}
+            />
+            <div className="p-6">
+              <h3 className="text-xl font-bold mb-2">{course.title}</h3>
+              <p className="text-gray-600 mb-4">{course.description}</p>
+              
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center text-gray-600">
+                  <Clock className="w-4 h-4 mr-2" />
+                  <span>{course.duration}</span>
                 </div>
-
-                <Button className="w-full mt-6">
-                  Enroll Now
-                </Button>
+                <div className="flex items-center text-gray-600">
+                  <Users className="w-4 h-4 mr-2" />
+                  <span>{course.students} students</span>
+                </div>
+                <div className="flex items-center text-gray-600">
+                  <Star className="w-4 h-4 mr-2" />
+                  <span>{course.rating}</span>
+                </div>
+                <div className="flex items-center text-gray-600">
+                  <Globe className="w-4 h-4 mr-2" />
+                  <span>{course.level}</span>
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+
+              <Button className="w-full" variant="primary">
+                Start Learning
+              </Button>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
     </div>
   );
 }

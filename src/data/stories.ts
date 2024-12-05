@@ -1,115 +1,123 @@
-import { Story } from '@/types/reading';
+import type { Story } from '@/types/reading';
 
 export const stories: Story[] = [
   {
-    id: 'beginner-1',
+    id: 'story-1',
     title: 'First Day in Israel',
-    level: 'Beginner',
-    category: 'Daily Life',
-    hebrew: 'שלום! קוראים לי דן. היום הגעתי לישראל. אני גר בתל אביב. העיר יפה מאוד.',
-    translation: 'Hello! My name is Dan. Today I arrived in Israel. I live in Tel Aviv. The city is very beautiful.',
-    audioUrl: '/audio/stories/first-day.mp3',
-    estimatedTime: '5 mins',
+    content: 'שלום! אני גר בישראל.\nאני לומד עברית כל יום.\nאני אוהב את השפה הזאת.',
+    transliteration: 'Shalom! Ani gar be\'Israel.\nAni lomed ivrit kol yom.\nAni ohev et hasafa hazot.',
+    translation: 'Hello! I live in Israel.\nI study Hebrew every day.\nI love this language.',
+    difficulty: 'beginner',
+    estimatedTime: 5,
     points: 100,
-    xpReward: 50,
     vocabulary: [
-      { word: 'שלום', translation: 'Hello', transliteration: 'Shalom' },
-      { word: 'קוראים לי', translation: 'My name is', transliteration: 'Korim li' },
-      { word: 'היום', translation: 'Today', transliteration: 'Hayom' },
-      { word: 'הגעתי', translation: 'I arrived', transliteration: 'Higati' },
-      { word: 'גר', translation: 'Live', transliteration: 'Gar' }
+      {
+        word: 'שלום',
+        translation: 'hello, peace',
+        transliteration: 'shalom',
+        partOfSpeech: 'noun'
+      },
+      {
+        word: 'אני',
+        translation: 'I',
+        transliteration: 'ani',
+        partOfSpeech: 'pronoun'
+      }
     ],
     questions: [
       {
         id: 'q1',
         type: 'multiple-choice',
-        question: 'Where does Dan live?',
-        options: ['Jerusalem', 'Tel Aviv', 'Haifa', 'Eilat'],
-        correctAnswer: 'Tel Aviv',
-        explanation: 'The text states "אני גר בתל אביב" (I live in Tel Aviv)',
-        points: 20
+        question: 'What does שלום mean?',
+        correctAnswer: 'hello/peace',
+        options: [
+          { text: 'hello/peace', isCorrect: true },
+          { text: 'goodbye', isCorrect: false },
+          { text: 'thank you', isCorrect: false }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'story-2',
+    title: 'At the Market',
+    content: 'אני הולך לשוק.\nאני קונה פירות וירקות.\nהכל טרי וטעים.',
+    transliteration: 'Ani holech lashuk.\nAni koneh peirot veyerakot.\nHakol tari veta\'im.',
+    translation: 'I go to the market.\nI buy fruits and vegetables.\nEverything is fresh and tasty.',
+    difficulty: 'beginner',
+    estimatedTime: 5,
+    points: 100,
+    vocabulary: [
+      {
+        word: 'שוק',
+        translation: 'market',
+        transliteration: 'shuk',
+        partOfSpeech: 'noun'
+      },
+      {
+        word: 'פירות',
+        translation: 'fruits',
+        transliteration: 'peirot',
+        partOfSpeech: 'noun'
       }
     ],
-    bonusChallenge: {
-      type: 'no-translation',
-      description: 'Complete the reading and questions without using the translation',
-      requirement: 'Score 100% without viewing translation',
-      reward: 50
-    }
+    questions: [
+      {
+        id: 'q1',
+        type: 'multiple-choice',
+        question: 'Where does the person go?',
+        correctAnswer: 'to the market',
+        options: [
+          { text: 'to the market', isCorrect: true },
+          { text: 'to school', isCorrect: false },
+          { text: 'to work', isCorrect: false }
+        ]
+      }
+    ]
   }
 ];
 
 export const readingLevels = [
   {
-    level: 1,
-    name: 'Beginner Reader',
-    xpRequired: 0,
-    benefits: ['Access to beginner stories', 'Basic vocabulary tools']
+    id: 'beginner',
+    title: 'Beginner',
+    description: 'Start your Hebrew journey with simple texts and everyday vocabulary',
+    stories: stories.filter(s => s.difficulty === 'beginner')
   },
   {
-    level: 2,
-    name: 'Developing Reader',
-    xpRequired: 100,
-    benefits: ['Access to longer stories', 'Audio playback']
+    id: 'intermediate',
+    title: 'Intermediate',
+    description: 'Challenge yourself with longer texts and more complex grammar',
+    stories: stories.filter(s => s.difficulty === 'intermediate')
   },
   {
-    level: 3,
-    name: 'Intermediate Reader',
-    xpRequired: 300,
-    benefits: ['Access to intermediate stories', 'Speed reading challenges']
-  },
-  {
-    level: 4,
-    name: 'Advanced Reader',
-    xpRequired: 600,
-    benefits: ['Access to advanced stories', 'Special achievements']
-  },
-  {
-    level: 5,
-    name: 'Expert Reader',
-    xpRequired: 1000,
-    benefits: ['Access to all content', 'Bonus challenges', 'Community recognition']
+    id: 'advanced',
+    title: 'Advanced',
+    description: 'Master Hebrew with authentic texts and advanced vocabulary',
+    stories: stories.filter(s => s.difficulty === 'advanced')
   }
 ];
 
 export const readingAchievements = [
   {
-    id: 'first-story',
-    name: 'First Steps',
+    id: 'first_story',
+    title: 'First Steps',
     description: 'Complete your first story',
-    xpReward: 50,
-    icon: 'award'
+    icon: 'trophy',
+    xpReward: 100
   },
   {
-    id: 'perfect-score',
-    name: 'Perfect Reader',
-    description: 'Get 100% on any story',
-    xpReward: 100,
-    icon: 'star'
+    id: 'beginner_master',
+    title: 'Beginner Master',
+    description: 'Complete all beginner stories',
+    icon: 'star',
+    xpReward: 500
   },
   {
-    id: 'speed-demon',
-    name: 'Speed Demon',
-    description: 'Complete a story in under 3 minutes with at least 80% accuracy',
-    xpReward: 150,
-    icon: 'zap'
-  },
-  {
-    id: 'no-translation',
-    name: 'Hebrew Master',
-    description: 'Complete a story without using translation',
-    xpReward: 200,
-    icon: 'award'
-  },
-  {
-    id: 'streak-7',
-    name: 'Weekly Warrior',
-    description: 'Read stories for 7 days in a row',
-    xpReward: 300,
-    icon: 'flame'
+    id: 'speed_reader',
+    title: 'Speed Reader',
+    description: 'Complete a story in under 3 minutes',
+    icon: 'clock',
+    xpReward: 200
   }
 ];
-
-export const difficultyLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'] as const;
-
-export type DifficultyLevel = typeof difficultyLevels[number];

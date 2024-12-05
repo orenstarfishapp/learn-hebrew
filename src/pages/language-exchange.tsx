@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Globe, MessageCircle, Video, Star, Calendar, Clock, Users } from 'lucide-react';
+import { Video, Star, Calendar, Clock, Users } from 'lucide-react';
 import { useState } from 'react';
 
 const partners = [
